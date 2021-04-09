@@ -114,11 +114,12 @@ def register():
 def selectlab():
     return render_template("pentest.html") 
 
-@app.route('/lab1', methods=['GET'])
+@app.route('/pentest/lab<int:i>', methods=['GET'])
 @login_required
-def lab():
+def lab(i):
     session['task-list']=0
-    return render_template("lab1.html", tasklist=labs.query.all())    
+    template = "lab" + str(i) + ".html"
+    return render_template(template, tasklist=labs.query.all())    
 
 @app.route('/lab1/task-<int:tid>')
 def update(tid):
