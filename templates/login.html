@@ -1,0 +1,42 @@
+{% extends "template/header.html" %}
+{% block title %} Login Page{% endblock %}
+{% block content %} 
+
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style/loginstyle.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='script/launchmachine.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='script/launchvm.js') }}"></script>
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+      <!-- Tabs Titles -->
+
+       <!--Flash output-->
+       <form method="POST" >
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <span class=flashes>
+          {% for category, message in messages %}
+            <p id="flash" class="{{ category }}">{{ message }}</p>
+          {% endfor %}
+          </span>
+        {% endif %}
+       {% endwith %}
+       <!-- Flash output end -->
+  
+      <!-- Login Form -->
+      <form method="post" >
+        <input type="text" id="login" class="fadeIn first" name="login" placeholder="username" required>
+        <input type="password" id="password" class="fadeIn second" name="password" placeholder="password" required>
+        <input type="submit" class="fadeIn fourth" value="Log In">
+      </form>
+  
+      <!-- Sign Up -->
+      <div id="formFooter">
+        <a class="underlineHover" href="register">Click to Sign up</a>
+      </div>
+  
+    </div>
+  </div> 
+
+{% endblock %}

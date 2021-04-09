@@ -1,0 +1,284 @@
+{% extends "template/header.html" %}
+{% block title %}Lab1{% endblock %}
+{% block content %} 
+<link rel="stylesheet" href="{{ url_for('static', filename='style/labstyle.css') }}">
+
+<input id="userid" hidden value="{{ session['userid']}}">
+
+<nav aria-label="breadcrumb"> 
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="index">Home</a></li>
+      <li class="breadcrumb-item"><a href="pentest">Pen-Testing</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Lab1</li>
+    </ol>
+</nav>
+<div style="display:flex;height:100vh;"> <!--main div-->
+<div class="split" id="split_one">
+  <!--Launch VM / machine button -->
+  <div class="machineInfo" style="display:none;margin:0em 1em;"> <!--machine info and countdown-->
+    <table class="table">
+      <thead>
+        <tr class="table-warning">
+          <th scope="col" >Machine IP address</th>
+          <th scope="col" >Time Remaining</th>
+          <th scope="col" >Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+          <tr class="table-light"> 
+            <td>10.0.0.1</td><!--get the ip address machine -->
+            <td id="countdowntimer" ></td> <!---countdown---> 
+            <td><button type="button" id="addTime" class="btn btn-info">Add one hour</button>
+              <button type="button" id="terminateMachine" class="btn btn-danger">Terminate Machine</button></td>
+          </tr> 
+      </tbody>
+    </table>
+  </div>
+  <div class="container"> <!--button -->
+    <button type="button" id="launchVM" class="btn btn-success" disabled>Launch VM</button>
+    <button type="button" id="launchMachine" class="btn btn-success">Launch Machine</button>
+  </div>
+  <!--each task in the labs-->
+  <div class="container2">
+
+      <div class="row">
+          <!--Build list group--->
+          <input value="{{ tasklist|length }}" id="tasklist_length" hidden=true>
+          <div class="col-4">
+            <div class="list-group" id="list-tab" role="tablist">
+              {% for i in range (0, tasklist|length) %} <!--tasklist is passed form main.py-->
+              
+
+              <a class="list-group-item list-group-item-action {{ 'active' if i==0 }}" id="list-task{{ (i+1) }}-list" data-toggle="list"  href="#list-task{{ i+1 }}" role="tab" aria-controls="task{{ i+1 }}">task {{i+1 }}</a>
+      
+              {% endfor %}
+
+            </div>
+          </div>
+          <!--end build-->
+
+          <!--build content-->
+          <div class="col-8">
+            <div class="tab-content" id="nav-tabContent">
+          {% for i in range (0, tasklist|length) %}
+              {% if i == 0 %}
+              <div class="tab-pane fade show active" id="list-task{{ i+1}}" role="tabpanel" aria-labelledby="list-task{{ i+1}}-list">
+              {% else %}
+              <div class="tab-pane fade" id="list-task{{ i+1 }}" role="tabpanel" aria-labelledby="list-task{{ i+1}}-list">
+               {% endif %}
+
+                 <p> {{ tasklist[i].content }} </p>
+
+ 
+              <div class="input-group mb-3"> <!--answer input-->
+                      
+                      <input type="text" id="input-task{{ i+1}}" name="input-task{{ i+1}}" class="form-control" placeholder="Answer:" aria-label="answer" aria-describedby="basic-addon2">
+                      <input hidden=True id="answer-task{{ i+1}}" name="answer-task{{ i+1}}" value="{{ (tasklist[i].answer)|string }}">
+                      <input hidden=True id="usercompleted_task{{ i+1 }}" value="{{ tasklist[i].completedby }}">
+                      <div class="input-group-append">
+                         <button class="btn btn-outline-secondary" id="submit-button{{ i+1 }}" onclick="check(this)" type="button">Submit</button>
+
+                          
+                          <button class="btn btn-outline-success" id="complete-button{{ i+1 }}" type="button" disabled style="display:none;">Completed </button>
+                      
+                          </div> 
+                </div> <!-- end answer input-->
+             </div>
+          {% endfor %}
+            
+            </div> <!--end one task-->
+
+          </div> <!--end col=8-->
+     </div><!--end class row-->
+
+
+<!--divider, only visible after vm is launched-->
+<div id='splitDiv' style="display:none;border-left: 5px solid grey;border-radius: 5px;"></div>
+
+<!--VM section i suppose-->
+<div class="split" id="split_two" style="display:none;"> 
+  <div class="container3"> 
+    <button type="button" id="terminateVM" class="btn btn-danger"> <i class="fas fa-power-off"></i>Terminate VM</button>
+  </div>
+    
+</div>
+</div>
+
+
+<script>
+
+
+var userid=document.getElementById('userid').value;
+
+console.log('userid = ' + userid);
+
+var tasklist_len=document.getElementById('tasklist_length').value;
+
+console.log('tasklist_len = ' + tasklist_len);
+
+
+//create a split view of the window / launching virtual machine?
+$("#launchVM").click(function(){
+    $("#split_one").addClass("left");
+    $("#split_two").show();
+    $("#split_two").addClass("right");
+    $("#splitDiv").show();
+    $("#launchVM").hide();
+    
+    $('#splitDiv').jSplitter({
+    'leftdiv': 'split_one',
+    'rightdiv': 'split_two',
+    'flex': true
+    });
+  });
+
+  //return to original state
+  $("#terminateVM").click(function(){
+    $("#split_two").hide();
+    $("#splitDiv").hide();
+    $("#split_one").removeClass("left");
+    $("#launchVM").show();
+
+  })
+ //launching and terminating machine
+ $("#launchMachine").click(function(){
+    $(".machineInfo").show();
+    $("#launchMachine").hide();
+    countdown();
+
+  })
+
+  //countdown timer
+ 
+    function countdown(){
+
+      var countdown = new Date();
+      countdown.setHours( countdown.getHours() + 2 );
+
+      var x = setInterval(function(){ //update countdown every second
+
+      var now = new Date().getTime();//get the current time
+
+      var d = countdown - now;
+      //hours, minutes, seconds
+      var hours = Math.floor((d % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((d % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((d % (1000 * 60)) / 1000);
+
+      //output 
+     document.getElementById("countdowntimer").innerHTML = hours + "h "+ minutes + "m " + seconds + "s ";
+      
+      //the countdown over, terminate the machine
+      if (d < 0) {
+        clearInterval(x);
+        document.getElementById("countdowntimer").innerHTML = "EXPIRED";
+        $(".machineInfo").hide();
+        $("#launchMachine").show();
+      }
+      document.getElementById('terminateMachine').onclick = function() { //when terminate button is clicked
+        clearInterval(x);
+        $(".machineInfo").hide();
+        $("#launchMachine").show();
+
+      }
+
+      document.getElementById("addTime").onclick = function() {//add time when clicked
+
+        if (d < (1000* 60*60)){
+          countdown.setHours( countdown.getHours() + 1 );
+        }
+        else{
+          console.log("too early!");
+        }
+        
+
+      }
+
+
+      }, 1000);
+    } //end of function countdown()
+
+function check(obj){
+ 
+  var z = obj.id.substring(obj.id.length-1, obj.id.length);
+  var x2 = "input-task" + z;
+  var y2 = "answer-task" + z;
+  var x = document.getElementById(x2).value ;
+  var y = document.getElementById(y2).value ;
+  var sb = "#submit-button" + z;
+  var cb = "#complete-button" + z;
+  //console.log("number : "+ z);
+  //console.log("input : "+ x);
+  //console.log("answer : "+ y);
+  
+  
+  if (x==y){
+    x2 = '#' + x2;
+    $(x2).prop("readonly", true);
+    console.log(x);
+    $(sb).hide();
+    $(cb).show();
+
+    markcomplete(z);
+  }else{
+    
+  }
+}
+
+function markcomplete(z){
+  current_URL = window.location.pathname;
+  z = '/task-' + z;
+  current_URL += z;
+
+  var new_win = window.open(current_URL);
+  console.log(current_URL);
+  new_win.close();
+  console.log('closed');
+  
+}
+
+//check if completed previously / to make the complete button persistent!
+for (var i = 1;  i <= tasklist_len ; i ++){
+  var input = "#input-task" + i;
+  var answer = "#answer-task" + i;
+  var userarray = "#usercompleted_task" + i;
+  var sb = "#submit-button" + i;
+  var cb = "#complete-button" +i;
+  answer = $(answer).val();
+  //console.log(input + answer + userarray);
+
+  //get the users, then split with comma 
+  userarray = $(userarray).val();
+  //console.log(userarray);
+  //console.log('list of users ' + userarray)
+  userarray = userarray.split(',');
+
+  for (var j in userarray){
+    if(trim_check_for_user(userarray[j]) == true){
+    //console.log('lab completed by user!');
+    //input field value change to answer
+    $(input).attr("value", answer);
+    
+    // input bar readonly
+    $(input).prop("readonly", true); 
+
+    $(sb).hide();  //hide the submit button
+    $(cb).show();  // show the complete button
+    break;
+    }else{
+      //console.log('not done');
+    }
+  }
+}
+function trim_check_for_user(user){   //check if the user id in the array
+  user.trim();
+  if (user == userid){ //if user in the list
+    return true;
+  }
+  else{
+    return false; 
+  }
+}
+</script>
+{% endblock %}

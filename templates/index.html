@@ -1,0 +1,63 @@
+{% extends "template/header.html" %}
+{% block title %}Index Page{% endblock %}
+{% block content %} 
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style/indexstyle.css') }}">
+
+<!---banner -->
+<div class="banner">
+    <div class="banner_content">
+     {% if session['username'] != null %} <!--session is not empty-->
+
+      <div class="banner_nav1">
+        <h1>Welcome, {{ session['username']}} </h1>
+      </div>
+     
+     <div class="banner_nav2">
+      <a href ="{{ url_for('download_file') }}"><button type="button" id="nav" class="btn btn-outline-info btn-sm"> <i class="fas fa-file-download"> OpenVPN</i></button></a>
+      <a href ="#"><button type="button"  id="nav" class="btn btn-outline-info btn-sm"> <i class="fas fa-question"> FAQ </i></button></a>
+      <a href ="logout"><button type="button"  id="nav" class="btn btn-outline-info btn-sm"><i class="fas fa-sign-out-alt"> Logout</i></button></a>
+    </div>
+
+     {% else %}<!-- redirect to login page if not logged in-->
+     <div class="banner_nav3">
+      <a href ="login"><button type="button" id="auth" class="btn btn-outline-primary btn-sm"><i class="fas fa-sign-in-alt"> Login</i></button></a>
+      <a href ="register"><button type="button"  id="auth" class="btn btn-outline-info btn-sm"><i class="fas fa-user-plus"> Sign Up</i></button></a>
+     </div>
+
+     {% endif %} 
+     
+
+    </div>
+</div>
+
+<!---courses available-->
+<div class="d-flex flex-row">
+
+  <a href ="pentest" class="btn btn-light btn-sm" id="p-2">
+    <h5>Penetration Testing</h5>
+    <i class="fas fa-laptop-code"style="font-size:8em;"></i>
+    <p>challenges including...</p>
+    <p>Hydra, burp suite...</p>
+  </a>
+
+  <a href ="#" class="btn btn-light btn-sm" id="p-2">
+      <h5>Network Security</h5>
+        <i class="fas fa-globe" style="font-size:8em;"></i>
+        <p>challenges including...</p>
+      <p>Firewalls, network attacks...</p>
+  </a>
+
+  <a  href ="#" class="btn btn-light btn-sm" id="p-2">
+    <h5>Secure Programming</h5>
+    <i class="fas fa-code" style="font-size:8em;"></i>
+    <p>challenges including...</p>
+    <p>OWASP top 10 ......</p>
+
+  </a>
+
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,33 @@
+
+*{
+  margin:0;
+  padding: 0;
+}
+.container{
+    width:100%;
+    margin:2em 1em;
+    padding:0em 0em;
+    text-align: center;
+
+}
+.container2{
+  padding:0em 4em;
+}
+
+.left{
+  min-width: 30%;
+  max-width: 50%;
+  top: 0;
+  left: 0;
+  padding:0;
+  margin-left:0;
+}
+
+
+.right{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:100%;
+}
+
