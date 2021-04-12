@@ -1,0 +1,386 @@
+{% extends "template/header.html" %}
+{% block title %} Login Page{% endblock %}
+{% block content %} 
+
+
+<style>
+  p,h1,h2,h3,h4,h5,h6{
+    font-family: "Palatino Linotype","Raleway", sans-serif;
+  }
+
+  a:hover{
+    text-decoration: none;
+  }
+  .row{
+    height:auto;
+  }
+  /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+  .row.content {height: 800px;}
+
+
+  
+  /* Set gray background color and 100% height */
+  .sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    display:block;
+    overflow-x: hidden;
+
+  }
+
+  li{
+    font-size: 1.5em;
+  }
+
+  /* On small screens, set height to 'auto' for the grid */
+  @media screen and (max-width: 700px) {
+    .row.content {height: auto;} 
+  }
+
+  .avatar {
+  vertical-align: middle;
+  width: 5em;
+  height:5em;
+  border-radius: 50%;
+  margin:1.5em;
+  margin-left: 0%;
+}
+
+.greet{
+  font-size: 1.5em;
+  overflow: auto;
+  margin:auto;
+}
+#greetings{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#greetings.div{
+  display:inline-block;
+  flex: 1;
+  overflow: auto;
+  position:fixed;
+}
+
+.well, .well-score, .well-lab, .well-view{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1em;
+  padding: 1em;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.well-title{
+  padding-left: 1em;
+  margin:2em 0 2em 0;
+  padding-bottom: 0;
+}
+
+.well-score{
+  background-color:#912727;
+  box-shadow:1px 1px 1px grey;  
+}
+
+.scoreboard, .profile{
+  margin:3em 0em 1em 1em;
+  
+}
+
+.lab{
+  margin-top: 3em;
+}
+
+.scoreboard h4, .profile h4 , .lab h4{
+  margin-bottom:1em;
+  font-size: 1.5rem;
+}
+
+.progress{
+  margin-top: 2em;
+}
+
+.well-lab{
+  background-color:#276f91;
+  box-shadow:1px 1px 1px grey; 
+}
+
+.well-view{
+  background-color: #407d41;
+  box-shadow:1px 1px 1px grey; 
+}
+#each-task{
+  margin:1em;
+  padding: 0.2em 2em 0em 0.5em;
+  box-shadow:1px 1px 1px grey; 
+
+  margin-left: 0;
+}
+
+#each-task i{
+ margin-bottom: 1em;
+}
+
+
+.left{
+  padding-right:0;
+  margin-bottom: 0;
+}
+.right, .left{
+  align-self: center;
+  
+}
+
+.right h1{
+  font-size: 2em;
+  padding-right: 0.2em;
+  padding-bottom: 3em;
+  
+}
+.left i{
+  font-size: 2em;
+  padding:0;
+}
+
+#main{
+  padding: 0;
+  padding-left: 23em;
+}
+
+a:hover{
+  text-decoration: none;
+  color:burlywood;
+}
+a{
+  color: moccasin;
+}
+
+.sidenav a, .dropdown li{
+    display:block;
+    cursor: pointer;
+    color:#41577d;
+  }
+  .sidenav a:hover{
+    background-color: #8194b5;
+  }
+
+.each-link{
+  color:black;
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.each-link:hover{
+  color:#1c2d45;
+  
+}
+</style>
+
+
+<body>
+
+<div class="container-fluid h-100">
+<div class="row content h-100">
+
+  <!--navbar-->
+  <div class="col-sm-3 sidenav hidden-xs">
+    <div id="greetings">
+      <div><img id="avatar" src="{{ url_for('static', filename='images/avatar.jpg') }}" alt="Avatar" class="avatar"></div></br>
+      <div>
+        <p class="greet">Welcome, </p>
+        <p class="greet"><strong> {{ session['username'] }}    </strong></p>
+      </div>
+    </div>
+
+    <hr>
+    <ul class="nav nav-pills nav-stacked flex-column">
+      <li class="active"><a href="#">Dashboard Overview</a></li>
+      <li><a href="#profile">Profile</a></li>
+      <li><a href="#scoreboard">Scoreboard</a></li>
+      <li><a href="#lab">Completed Lab</a></li>
+      <li><a href=" {{ url_for('home')}}"> <i class="fas fa-sign-out-alt" style="margin-right: 1em;"></i> Back Home</a></li>
+
+    </ul><br>
+
+    
+  </div>
+
+  <!-- end navbar-->
+  <br>
+
+  <!--Three Box-->
+  <div class="col"  id="main">
+    <div class="col-md-15">
+
+
+      <div class="well-title">
+        <h2 style="text-transform: capitalize;"><i class="far fa-chart-bar"> </i> {{ session['username']}}  Dashboard</h2>
+      </div>
+
+      <div class="row"> <!--scoreboard/lab/view box-->
+        <a href="#scoreboard">
+
+        <div class="col"> <!--scoreboard-->
+      
+          <div class="well-score">
+
+            <div class="left">
+              <h2><i class="fab fa-deezer"></i></h2>
+              </br>
+              <h4>Scoreboard</h4>
+              </br>
+            </div>
+            <div class="right">
+              <h1> 1000</h1>
+            </div>
+
+          </div>
+        </a>
+        </div>
+
+        <div class="col"> <!--lab-->
+          <a href="#lab">
+          <div class="well-lab">
+
+            <div class="left">
+              <h2><i class="far fa-check-square"></i></h2>
+              </br>
+              <h4>Completed Lab</h4>
+              </br>
+            </div>
+            <div class="right">
+              <h1> 1 </h1>
+            </div>
+            
+          </div>  
+          </a>
+        </div>
+        <div class="col"> <!--Profile-->
+          <a href="#profile">
+          <div class="well-view">
+
+            <div class="left">
+              <h2><i class="fas fa-user-edit"></i></h2>
+              </br>
+              <h4>Profile</h4>
+              </br>
+            </div>
+            <div class="right">
+              <h1><i class="fas fa-mouse-pointer"></i> </h1>
+            </div>
+            
+          </div>  
+          </a>
+        </div>
+      </div>
+
+
+      <div class="row"> <!--score board-->
+        <div class="col-sm-9">
+          <div id="scoreboard" class="scoreboard">
+
+         
+          <h4><i class="fab fa-deezer"></i> Scoreboard</h4>
+            <div class="progress">
+              
+              <div class="progress-bar progress-bar-striped bg-info  progress-bar-animated" role="progressbar" style="width: 80%" aria-valuenow="10" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+         </div> <!-- end scoreboard-->
+        </div>
+
+        <div class="col-sm">
+          <div class="scoreboard">
+          <h4>Next Level</h4>
+          <div class="next-lev">
+            <h4>1444/2000</h4>
+          </div>
+
+         </div> <!-- end scoreboard-->
+        </div>
+
+      </div> <!-- end scoreboard div-->
+            
+      <div class="col"> <!--Recently completed lab-->
+          <div id="lab" class="lab">
+
+          <h4><i class="far fa-check-square"></i> Recently completed lab</h4>
+            <div class="row  justify-content-between">
+        
+            {% for i in range (0,6) %}
+              
+              <div class="col-3" id="each-task">
+                  <a class="each-link" href="#" >
+                  <p>PenetrationTesting/Lab {{i+1}}</p>
+                  <i style="font-size: 3em;" class="fas fa-laptop-code"></i>
+                  </a>
+                </div>
+         
+            {% endfor%}
+
+        </div>
+
+       </div> <!-- end Recent lab-->
+      </div>
+
+      <div class="row"> <!--Profile-->
+        
+        <div class="col-sm-7">
+          <div class="profile" id="profile">
+          <h4><i class="fas fa-edit"></i> View/Edit Profile</h4>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Username: </span>
+            </div>
+            <input type="text" class="form-control" readonly="true" value="{{ user.username }}" style="background-color:white ;">
+          </div>
+
+          <div class="input-group mb-7">
+            <div class="input-group-prepend">
+              <span class="input-group-text">FirstName:</span>
+            </div>
+            <input type="text" class="form-control" readonly="true" value="First name" style="background-color:white ;">
+          </div><br>
+
+          <div class="input-group mb-7">
+            <div class="input-group-prepend">
+              <span class="input-group-text">LastName:</span>
+            </div>
+            <input type="text" class="form-control" readonly="true" value="Last name" style="background-color:white ;">
+          </div><br>
+
+          <div class="input-group mb-7">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Email : </span>
+            </div>
+            <input type="text" class="form-control" readonly="true" value="ryan@mydomain.com" style="background-color:white ;">
+          </div><br>
+
+          <div class="input-group mb-7">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Institution : </span>
+            </div>
+            <input type="text" class="form-control" readonly="true" value="Technological University Dublin" style="background-color:white ;">
+          </div> <br>
+
+          <div class="input-group mb-7">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Website : </span>
+            </div>
+
+            <input type="text" class="form-control" readonly="true" value="https://github.com" style="background-color:white ;">
+          </div>
+
+         </div> <!-- end profile-->
+        </div>
+
+      </div> <!-- end Profile div-->      
+
+</div><!--end row-->
+</div><!--end fluid-->
+
+{% endblock %}

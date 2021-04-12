@@ -121,6 +121,15 @@ def lab(i):
     template = "lab" + str(i) + ".html"
     return render_template(template, tasklist=labs.query.all())    
 
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    if session['username'] == 'admin': 
+        return render_template("admin.html", user=users.query.all(), lab=labs.query.all())
+
+    return render_template("dashboard.html", user =users.query.filter_by(userid=session['userid']).first()) 
+
+
 @app.route('/lab1/task-<int:tid>')
 def update(tid):
     user = str(session['userid'])

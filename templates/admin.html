@@ -1,0 +1,301 @@
+{% extends "template/header.html" %}
+{% block title %} Login Page{% endblock %}
+{% block content %} 
+
+
+<style>
+  p,h1,h2,h3,h4,h5,h6{
+    font-family: "Palatino Linotype","Raleway", sans-serif;
+  }
+
+  a:hover{
+    text-decoration: none;
+  }
+  .row{
+    height:auto;
+  }
+  /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+  .row.content {height: 800px;}
+
+
+  
+  /* Set gray background color and 100% height */
+  .sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    display:block;
+    overflow-x: hidden;
+
+  }
+
+  .sidenav a, .dropdown li{
+    display:block;
+    cursor: pointer;
+  }
+
+  li{
+    font-size: 1.5em;
+  }
+
+  /* On small screens, set height to 'auto' for the grid */
+  @media screen and (max-width: 700px) {
+    .row.content {height: auto;} 
+  }
+
+  .avatar {
+  vertical-align: middle;
+  width: 5em;
+  height:5em;
+  border-radius: 50%;
+  margin:1.5em;
+  margin-left: 0%;
+}
+
+.greet{
+  font-size: 1.5em;
+  overflow: auto;
+  margin:auto;
+}
+#greetings{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#greetings.div{
+  display:inline-block;
+  flex: 1;
+  overflow: auto;
+  position:fixed;
+}
+
+.well, .well-user, .well-lab, .well-view{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1em;
+  padding: 1em;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.well-title{
+  padding-left: 1em;
+  margin:2em 0 2em 0;
+  padding-bottom: 0;
+}
+
+.well-user{
+  background-color:#912727;
+  box-shadow:1px 1px 1px grey;  
+}
+
+.well-lab{
+  background-color:#276f91;
+  box-shadow:1px 1px 1px grey; 
+}
+
+.well-view{
+  background-color:#407d41;
+  box-shadow:1px 1px 1px grey; 
+}
+.left{
+  padding-right:0;
+  margin-bottom: 0;
+}
+.right, .left{
+  align-self: center;
+  color:white;
+  
+}
+
+.right h1{
+  font-size: 2em;
+  padding-right: 0.2em;
+  padding-bottom: 3em;
+  
+}
+.left i{
+  font-size: 2em;
+  padding:0;
+}
+
+#main{
+  padding: 0;
+  padding-left: 23em;
+}
+
+</style>
+
+
+<body>
+
+<div class="container-fluid h-100">
+<div class="row content h-100">
+
+  <!--navbar-->
+  <div class="col-sm-3 sidenav hidden-xs">
+    <div id="greetings">
+      <div><img id="avatar" src="{{ url_for('static', filename='images/avatar.jpg') }}" alt="Avatar" class="avatar"></div></br>
+      <div>
+        <p class="greet">Welcome, </p>
+        <p class="greet"><strong> {{ session['username'] }}    </strong></p>
+      </div>
+    </div>
+
+    <hr>
+    <ul class="nav nav-pills nav-stacked flex-column">
+      <li class="active"><a href="#">Dashboard Overview</a></li>
+      <li><a href="#usertable">Users</a></li>
+      <li class="dropdown show">
+        <a href="#labtable" class="dropdown-toggle" data-toggle="dropdown"aria-haspopup="true" aria-expanded="false" >Labs</a>
+          <div class="dropdown-menu">
+            <a href="#labtable" class="dropdown-item">PenetrationTesting/Lab1</a>
+          </div>
+        
+     </li>
+    </ul><br>
+  </div>
+
+  <!-- end navbar-->
+  <br>
+  <div class="col"  id="main">
+    <div class="col-md-15">
+      <div class="well-title">
+        <h2><i class="far fa-chart-bar"> </i> Admin Dashboard</h2>
+      </div>
+      <div class="row">
+
+        <div class="col">
+        <a href="#usertable">
+          <div class="well-user">
+
+            <div class="left">
+              <h2><i class="fas fa-users"></i></h2>
+              </br>
+              <h4>Active users</h4>
+              </br>
+            </div>
+            <div class="right">
+              <h1> {{ user|length }}</h1>
+            </div>
+
+          </div>
+        </a>
+        </div>
+        <div class="col">
+          <a href="#lab1table">
+          <div class="well-lab">
+
+            <div class="left">
+              <h2><i class="fas fa-network-wired"></i></h2>
+              </br>
+              <h4>Running Lab</h4>
+              </br>
+            </div>
+            <div class="right">
+              <h1> 1 </h1>
+            </div>
+            
+          </div>  
+          </a>
+        </div>
+        <div class="col">
+          <div class="well-view">
+
+            <div class="left">
+              <h2><i class="fas fa-eye"></i></h2>
+              </br>
+              <h4>Views</h4>
+              </br>
+            </div>
+            <div class="right">
+              <h1> 122</h1>
+            </div>
+            
+          </div>  
+        </div>
+      </div>
+
+      <div class="row"> <!--user table-->
+        <div class="col-sm-9">
+          <div class="well"> 
+            <h4><i class="fas fa-users" style="color:#ff3333"></i> All Active Users</h4>
+            <table id="usertable" class="table table-hover">
+              <thead>
+                <tr>
+                  <td>User ID</td>
+                  <td>Username</td>
+                  <td>Score</td>
+                  <td>Joined Date</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in range (0, user|length) %} 
+                <tr>
+                  <td> {{ user[i].userid }}</td>
+                  <td> {{ user[i].username }}</td>
+                  <td> - </td>
+                  <td> - </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <p>Text</p> 
+          </div>
+        </div>
+      </div> <!--end user table-->
+
+      <div class="row"> <!--lab table-->
+        <div class="col-sm-9">
+          <div class="well">
+            <h4> <i class="fas fa-network-wired" style="color:#3385ff"></i> PenetrationTesting/Lab1</h4>
+            <table id="lab1table" class="table table-hover">
+              <thead>
+                <tr>
+                  <td>Task id</td>
+                  <td>Task Title</td>
+                  <td>Answer</td>
+                  <td>Created By</td>
+                </tr>
+              </thead>
+              <tbody>
+                {% for i in range (0, lab|length) %} 
+                <tr>
+                  <td> {{ lab[i].id }}</td>
+                  <td> {{ lab[i].title }}</td>
+                  <td> {{ lab[i].answer }} </td>
+                  <td> - </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+
+            </table>
+          </div>
+        </div>
+        <div class="col-sm-3">
+          <div class="well">
+            <p>Text</p> 
+          </div>
+        </div>
+      </div> <!--end lab table-->
+      
+
+
+    </div>
+
+
+
+  </div><!--close main-->
+  
+
+</div><!--end row-->
+</div><!--end fluid-->
+
+{% endblock %}
