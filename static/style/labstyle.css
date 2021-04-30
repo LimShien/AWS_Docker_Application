@@ -9,9 +9,18 @@
     padding:0em 0em;
     text-align: center;
 
+
 }
 .container2{
   padding:0em 4em;
+  position: relative;
+  z-index: 1;
+
+}
+
+.row{
+  position: relative;
+  z-index: 1;
 }
 
 .left{
@@ -31,3 +40,36 @@
   width:100%;
 }
 
+#toast_containerout{
+  position: relative;
+  min-height: 100%;
+  z-index: 10;
+  
+}
+#toastcontainer{
+  position: absolute;
+  min-width:18%;
+  max-width: 18%;
+  right:0;
+  z-index: 11;
+}
+.toast{
+height:5em;
+padding: 0;
+position: relative;
+z-index: 12;
+}
+
+.toast-body{
+display: flex;
+justify-content: center;
+align-items: center;
+font-size: 1rem;
+font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+
+}
+
+#main_div{
+  position: relative;
+  z-index: 1;
+}

@@ -19,11 +19,15 @@ class users(UserMixin,db.Model):
     userid = db.Column("userid", db.String(64), unique=True, nullable=False ) 
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(300), nullable=False)
+    email=db.Column(db.String(300), nullable=True)
+    score=db.Column(db.Integer,  nullable=True)
+    completedlab=db.Column(db.String(),  nullable=True, default=0)
 
     def __init__(self, username, password):
         self.userid = random.getrandbits(32)
         self.username=username
         self.password=password
+        
 
 class labs(db.Model):
     id = db.Column("id", db.Integer, primary_key=True) 
@@ -124,21 +128,38 @@ def lab(i):
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    if session['username'] == 'admin': 
-        return render_template("admin.html", user=users.query.all(), lab=labs.query.all())
-
     return render_template("dashboard.html", user =users.query.filter_by(userid=session['userid']).first()) 
+
+
+@app.route('/admin')
+@login_required
+def admin_dashboard():
+    if session['username'] == 'admin':
+        return render_template("admin.html", user =users.query.all(), lab=labs.query.all()) 
+    else: 
+        return redirect(url_for("dashboard"))
+
 
 
 @app.route('/lab1/task-<int:tid>')
 def update(tid):
-    user = str(session['userid'])
-    userarray =labs.query.filter_by(id=tid).first().completedby
+    ##update the completedby user array in labs table
+    user = str(session['userid']) ##get current userid 
+    users = users.query.filter_by(session['userid']).first()
+    userarray =labs.query.filter_by(id=tid).first().completedby ##query lab table --> filter by lab id
 
-    userarray += ','
-    userarray += user
-    labs.query.filter_by(id=tid).first().completedby = userarray
+    userarray += ','   ##append the user array
+    userarray += user  
+    labs.query.filter_by(id=tid).first().completedby = userarray  ##update the user array in lab
 
+
+    ##add certain mark for completing the task/lab
+    users.score += 5
+
+    ##update the users table completed lab/task
+    users.completedlab += ":"
+    users.completedlab += str(tid)
+    
     db.session.commit()
     return ''
 

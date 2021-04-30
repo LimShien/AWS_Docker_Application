@@ -12,8 +12,20 @@
       <li class="breadcrumb-item active" aria-current="page">Lab1</li>
     </ol>
 </nav>
-<div style="display:flex;height:100vh;"> <!--main div-->
+
+  <!--Toast-->
+  <div id="toast_containerout">
+
+  <div id = "toastcontainer">
+
+  </div>
+
+   </div>
+  <!--end toast-->
+
+<div style="display:flex;height:100vh;" id="main_div"> <!--main div-->
 <div class="split" id="split_one">
+
   <!--Launch VM / machine button -->
   <div class="machineInfo" style="display:none;margin:0em 1em;"> <!--machine info and countdown-->
     <table class="table">
@@ -27,7 +39,7 @@
 
       <tbody>
           <tr class="table-light"> 
-            <td>10.0.0.1</td><!--get the ip address machine -->
+            <td>10.0.2.135</td><!--get the ip address machine should be dynamic -->
             <td id="countdowntimer" ></td> <!---countdown---> 
             <td><button type="button" id="addTime" class="btn btn-info">Add one hour</button>
               <button type="button" id="terminateMachine" class="btn btn-danger">Terminate Machine</button></td>
@@ -39,6 +51,9 @@
     <button type="button" id="launchVM" class="btn btn-success" disabled>Launch VM</button>
     <button type="button" id="launchMachine" class="btn btn-success">Launch Machine</button>
   </div>
+
+
+
   <!--each task in the labs-->
   <div class="container2">
 
@@ -77,7 +92,7 @@
                       <input hidden=True id="answer-task{{ i+1}}" name="answer-task{{ i+1}}" value="{{ (tasklist[i].answer)|string }}">
                       <input hidden=True id="usercompleted_task{{ i+1 }}" value="{{ tasklist[i].completedby }}">
                       <div class="input-group-append">
-                         <button class="btn btn-outline-secondary" id="submit-button{{ i+1 }}" onclick="check(this)" type="button">Submit</button>
+                         <button class="btn btn-outline-secondary" id="submit-button{{ i+1 }}" onclick="submit_answer(this)" type="button">Submit</button>
 
                           
                           <button class="btn btn-outline-success" id="complete-button{{ i+1 }}" type="button" disabled style="display:none;">Completed </button>
@@ -141,11 +156,14 @@ $("#launchVM").click(function(){
     $("#launchVM").show();
 
   })
+
  //launching and terminating machine
  $("#launchMachine").click(function(){
     $(".machineInfo").show();
     $("#launchMachine").hide();
+    console.log("Launch VM");
     countdown();
+    createToast('Machine Starting... Please Wait','b');
 
   })
 
@@ -189,43 +207,36 @@ $("#launchVM").click(function(){
           countdown.setHours( countdown.getHours() + 1 );
         }
         else{
-          console.log("too early!");
+          createToast('Too early to add time','b');
         }
-        
-
       }
-
-
       }, 1000);
     } //end of function countdown()
 
-function check(obj){
- 
-  var z = obj.id.substring(obj.id.length-1, obj.id.length);
-  var x2 = "input-task" + z;
+function submit_answer(obj){ //check the user answer with the correct answer, passing the object itself as args
+  
+  var z = obj.id.substring(obj.id.length-1, obj.id.length); //get current task id
+  var x2 = "input-task" + z; //to locate the exact task
   var y2 = "answer-task" + z;
   var x = document.getElementById(x2).value ;
   var y = document.getElementById(y2).value ;
   var sb = "#submit-button" + z;
   var cb = "#complete-button" + z;
-  //console.log("number : "+ z);
-  //console.log("input : "+ x);
-  //console.log("answer : "+ y);
-  
-  
-  if (x==y){
+  //console.log("number : "+ z); console.log("input : "+ x); console.log("answer : "+ y);
+
+  if (x==y){ // if answer is true
     x2 = '#' + x2;
     $(x2).prop("readonly", true);
-    console.log(x);
+    //console.log(x); if correct, hide the submit button and show the completed button 
     $(sb).hide();
-    $(cb).show();
+    $(cb).show(); 
+    createToast('Correct Answer!','g'); //create the toast for correct answer
+    markcomplete(z); //mark complete at database
 
-    markcomplete(z);
   }else{
-    
+    createToast('The answer is incorrect, please try again','r');
   }
 }
-
 function markcomplete(z){
   current_URL = window.location.pathname;
   z = '/task-' + z;
@@ -235,7 +246,6 @@ function markcomplete(z){
   console.log(current_URL);
   new_win.close();
   console.log('closed');
-  
 }
 
 //check if completed previously / to make the complete button persistent!
@@ -280,5 +290,49 @@ function trim_check_for_user(user){   //check if the user id in the array
     return false; 
   }
 }
+
+//testing for the toast
+//document.getElementById('testingtoast').addEventListener('click', () => {createToast('Too early to add time','g');});
+
+
+function createToast(text, bgcolor){
+    //this method spawn a toast every time being 
+    //the parameter of function : text -> the message,   bgcolor -> the background color representation/initials
+    //outer toast 
+
+    var id = new Date().getTime();
+    var div= document.createElement('div'); //create the element div and set the attributes value
+    div.setAttribute('class','toast');
+    div.setAttribute('id',id);
+    div.setAttribute("role",'alert');
+    div.setAttribute("aria-live",'assertive');
+    div.setAttribute("aria-atomic",'true');
+    div.setAttribute('data-delay', '3000');
+
+    //inner toast 
+    var div_in = document.createElement('div'); 
+    div_in.setAttribute('class', 'toast-body border-left'); 
+    div_in.setAttribute('id',id);
+    div_in.appendChild(document.createTextNode(text)); //Create the content/message
+
+    div.appendChild(div_in);
+    document.getElementById('toastcontainer').appendChild(div);
+
+    if(bgcolor == 'g'){  //determine the background color based on the value provided
+    $('#'+id).css("background-color", "rgba(64,125,65,0.4)");
+    }
+    else if (bgcolor == 'r'){
+    $('#'+id).css("background-color", "rgb(145, 39, 39,0.4)");
+    }
+    else{
+    $('#'+id).css("background-color", "rgb(240, 229, 204,0.8)");
+    }
+
+
+    //show the toast
+    $('#' + id).toast('show');
+    $(this).closest('.toast').toast('dispose');
+
+     }
 </script>
 {% endblock %}

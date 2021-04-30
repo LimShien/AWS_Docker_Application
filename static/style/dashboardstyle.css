@@ -1,0 +1,174 @@
+p,h1,h2,h3,h4,h5,h6{
+    font-family: "Palatino Linotype","Raleway", sans-serif;
+  }
+
+  a:hover{
+    text-decoration: none;
+  }
+  .row{
+    height:auto;
+  }
+  /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+  .row.content {height: 800px;}
+
+
+  
+  /* Set gray background color and 100% height */
+  .sidenav {
+    background-color: #f1f1f1;
+    height: 100%;
+    position: fixed;
+    z-index: 1; 
+    overflow-x: hidden;
+
+  }
+
+  li{
+    font-size: 1.5em;
+  }
+
+  /* On small screens, set height to 'auto' for the grid */
+  @media screen and (max-width: 700px) {
+    .row.content {height: auto;} 
+  }
+
+  .avatar {
+  vertical-align: middle;
+  width: 5em;
+  height:5em;
+  border-radius: 50%;
+  margin:1.5em;
+  margin-left: 0%;
+}
+
+.greet{
+  font-size: 1.5em;
+  overflow: auto;
+  margin:auto;
+}
+#greetings{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+#greetings.div{
+  display:inline-block;
+  flex: 1;
+  overflow: auto;
+  position:fixed;
+}
+
+.well, .well-score, .well-lab, .well-view,  .well-user{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 1em;
+  padding: 1em;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.well-title{
+  padding-left: 1em;
+  margin:2em 0 2em 0;
+  padding-bottom: 0;
+}
+
+.well-score, .well-user{
+  background-color:#912727;
+  box-shadow:1px 1px 1px grey;  
+}
+
+.scoreboard, .profile{
+  margin:3em 0em 1em 1em;
+  
+}
+
+.lab{
+  margin-top: 3em;
+}
+
+.scoreboard h4, .profile h4 , .lab h4{
+  margin-bottom:1em;
+  font-size: 1.5rem;
+}
+
+.progress{
+  margin-top: 2em;
+}
+
+.well-lab{
+  background-color:#276f91;
+  box-shadow:1px 1px 1px grey; 
+}
+
+.well-view{
+  background-color: #407d41;
+  box-shadow:1px 1px 1px grey; 
+}
+#each-task{
+  margin:1em;
+  padding: 0.2em 2em 0em 0.5em;
+  box-shadow:1px 1px 1px grey; 
+
+  margin-left: 0;
+}
+
+#each-task i{
+ margin-bottom: 1em;
+}
+
+
+.left{
+  padding-right:0;
+  margin-bottom: 0;
+}
+.right, .left{
+  align-self: center;
+  
+}
+
+.right h1{
+  font-size: 2em;
+  padding-right: 0.2em;
+  padding-bottom: 3em;
+  
+}
+.left i{
+  font-size: 2em;
+  padding:0;
+}
+
+#main{
+  padding: 0;
+  padding-left: 23em;
+}
+
+a:hover{
+  text-decoration: none;
+  color:burlywood;
+}
+a, .well-view{
+  color: moccasin;
+}
+
+.sidenav a, .dropdown li{
+    display:block;
+    cursor: pointer;
+    color:#41577d;
+  }
+  .sidenav a:hover{
+    background-color: #8194b5;
+  }
+
+.each-link{
+  color:black;
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.each-link:hover{
+  color:#1c2d45;
+  
+}

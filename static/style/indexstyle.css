@@ -1,19 +1,45 @@
-#p-2{
+#p-2,#p-3, #p-4{
     width: 28%;
     height: 20em;
     padding:1.5em 2em;
     margin: 15px auto;
     overflow-wrap: normal;
-    
-  }
+}
+
+
   
+  #p-2 {
+   color:#912727;
+   box-shadow:1px 1px 1px #912727;
+  }
+
+  #p-3 {
+    color:#276f91;
+    box-shadow:1px 1px 1px #276f91;
+   }
+  
+   #p-4 {
+    color:#407d41;
+    box-shadow:1px 1px 1px #407d41;
+    
+   }
+
+   #p-2 h5 ,#p-3 h5, #p-4 h5{
+     font-size: 2rem;
+   }
+
+   #p-2 p ,#p-3 p, #p-4 p {
+     color:black;
+     margin-top: 2em;
+     padding-bottom: 0;
+   }
   /***Banner ***/
   .banner{
     width:100%;
     height: 20em;
     margin:0;
     margin-bottom: 2em;
-    background-color: black;
+    background-color:black;
 
   }
 
@@ -27,8 +53,9 @@
 
   }
   .banner_nav1 h1{
-    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 75px;
+    color:#92959c;
   }
   
   .banner_nav2{

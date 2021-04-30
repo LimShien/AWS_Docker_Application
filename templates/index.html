@@ -4,34 +4,72 @@
 
 <link rel="stylesheet" href="{{ url_for('static', filename='style/indexstyle.css') }}">
 
+
 <!---banner -->
 <div class="banner">
     <div class="banner_content">
      {% if session['username'] != null %} <!--session is not empty-->
 
       <div class="banner_nav1">
-        <h1>Welcome, {{ session['username']}} </h1>
+        <h1>Welcome {{ session['username']}} </h1>
       </div>
      
      <div class="banner_nav2">
       <a href ="{{ url_for('dashboard') }}"><button type="button" id="nav" class="btn btn-outline-info btn-sm"> <i class="fas fa-palette"> Dashboard</i></button></a>
-      <a href ="{{ url_for('download_file') }}"><button type="button" id="nav" class="btn btn-outline-info btn-sm"> <i class="fas fa-file-download"> OpenVPN</i></button></a>
-      <a href ="#"><button type="button"  id="nav" class="btn btn-outline-info btn-sm"> <i class="fas fa-question"> FAQ </i></button></a>
+      <a href ="#"><button type="button" id="nav" class="btn btn-outline-info btn-sm"> <i class="fas fa-file-download" data-toggle="modal" data-target="#modalforovpn"> OpenVPN</i></button></a>
+      <a href ="#"><button type="button"  id="nav" class="btn btn-outline-info btn-sm"> <i class="fas fa-question" data-toggle="modal" data-target="#modalforfaq"> FAQ </i></button></a>
       <a href ="logout"><button type="button"  id="nav" class="btn btn-outline-info btn-sm"><i class="fas fa-sign-out-alt"> Logout</i></button></a>
       
     </div>
 
      {% else %}<!-- redirect to login page if not logged in-->
      <div class="banner_nav3">
-      <a href ="login"><button type="button" id="auth" class="btn btn-outline-primary btn-sm"><i class="fas fa-sign-in-alt"> Login</i></button></a>
-      <a href ="register"><button type="button"  id="auth" class="btn btn-outline-info btn-sm"><i class="fas fa-user-plus"> Sign Up</i></button></a>
+      <a href ="login"><button type="button" id="auth" class="btn btn-outline-primary btn-sm"><i class="fas fa-sign-in-alt"  > Login</i></button></a>
+      <a href ="register"><button type="button"  id="auth" class="btn btn-outline-info btn-sm"><i class="fas fa-user-plus" > Sign Up</i></button></a>
      </div>
 
      {% endif %} 
-     
 
     </div>
 </div>
+
+    <!--modal for FAQ-->
+    <div class="modal fade" id="modalforfaq" tabindex="-1" role="dialog" aria-labelledby="modalforfaq" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">FAQ</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            FAQ is on the way... 
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--end modal for fAQ-->
+
+    <!--modal for OpenVPN-->
+    <div class="modal fade" id="modalforovpn" tabindex="-1" role="dialog" aria-labelledby="modalforovpn" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">OpenVPN</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          <a href="{{ url_for('download_file') }}"><button  type="button" class="btn btn-info"> Download openVPN configuration file. </button></a> 
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!--end modal for OpenVPN-->
 
 <!---courses available-->
 <div class="d-flex flex-row">
@@ -39,22 +77,19 @@
   <a href ="pentest" class="btn btn-light btn-sm" id="p-2">
     <h5>Penetration Testing</h5>
     <i class="fas fa-laptop-code"style="font-size:8em;"></i>
-    <p>challenges including...</p>
-    <p>Hydra, burp suite...</p>
+    <p>Module Description...</p>
   </a>
 
-  <a href ="#" class="btn btn-light btn-sm" id="p-2">
+  <a href ="#" class="btn btn-light btn-sm" id="p-3">
       <h5>Network Security</h5>
         <i class="fas fa-globe" style="font-size:8em;"></i>
-        <p>challenges including...</p>
-      <p>Firewalls, network attacks...</p>
+        <p>Module Description...</p>
   </a>
 
-  <a  href ="#" class="btn btn-light btn-sm" id="p-2">
+  <a  href ="#" class="btn btn-light btn-sm" id="p-4">
     <h5>Secure Programming</h5>
     <i class="fas fa-code" style="font-size:8em;"></i>
-    <p>challenges including...</p>
-    <p>OWASP top 10 ......</p>
+    <p>Module Description...</p>
 
   </a>
 
