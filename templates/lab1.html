@@ -265,6 +265,7 @@ for (var i = 1;  i <= tasklist_len ; i ++){
   //console.log('list of users ' + userarray)
   userarray = userarray.split(',');
 
+
   for (var j in userarray){
     if(trim_check_for_user(userarray[j]) == true){
     //console.log('lab completed by user!');
@@ -282,6 +283,7 @@ for (var i = 1;  i <= tasklist_len ; i ++){
     }
   }
 }
+
 function trim_check_for_user(user){   //check if the user id in the array
   user.trim();
   if (user == userid){ //if user in the list

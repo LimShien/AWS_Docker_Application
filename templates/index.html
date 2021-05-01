@@ -62,9 +62,14 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+
           <div class="modal-body">
+          <form method="GET">
+
+          <button type="submit" class="btn btn-info"> Create User. </button>
           <a href="{{ url_for('download_file') }}"><button  type="button" class="btn btn-info"> Download openVPN configuration file. </button></a> 
-          </div>
+          </form>
+        </div>
 
         </div>
       </div>

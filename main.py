@@ -5,6 +5,7 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user,login_required,logout_user
 import random
 import time
+import cus_func
 app = Flask(__name__)
 app.secret_key = 's3cr3tK3y'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/database.db'
@@ -42,13 +43,17 @@ class openvpn_config(db.Model):
 
 
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def home():
+    if request.method == 'GET':
+        if 'userid' in session:  
+            cus_func.create_user(session['userid'])
+
     return render_template("index.html")
 
 @app.route('/index')
 def rhome():
-    return render_template("index.html")
+    return redirect(url_for("home"))
 
 @app.route('/index/download')
 def download_file():
@@ -141,25 +146,29 @@ def admin_dashboard():
 
 
 
-@app.route('/lab1/task-<int:tid>')
+@app.route('/pentest/lab1/task-<int:tid>')
 def update(tid):
     ##update the completedby user array in labs table
-    user = str(session['userid']) ##get current userid 
-    users = users.query.filter_by(session['userid']).first()
+    userid = str(session['userid']) ##get current userid 
+
+    user= users.query.filter_by(userid=userid).first() ##The userobject => to append the score/completed lab
+
     userarray =labs.query.filter_by(id=tid).first().completedby ##query lab table --> filter by lab id
 
     userarray += ','   ##append the user array
-    userarray += user  
+    userarray += userid
     labs.query.filter_by(id=tid).first().completedby = userarray  ##update the user array in lab
 
+    print(userarray)
 
     ##add certain mark for completing the task/lab
-    users.score += 5
+    user.score += 5
 
     ##update the users table completed lab/task
-    users.completedlab += ":"
-    users.completedlab += str(tid)
+    user.completedlab += ":"
+    user.completedlab += str(tid)
     
+
     db.session.commit()
     return ''
 
