@@ -47,18 +47,21 @@ class openvpn_config(db.Model):
 def home():
     if request.method == 'GET':
         if 'userid' in session:  
-            cus_func.create_user(session['userid'])
-
+            if  request.args.get('action') == 'createprofile' :
+                cus_func.create_user(session['userid'])
+            elif request.args.get('action') == 'getovpn':
+                cus_func.create_ovpn(session['userid']) 
+                time.sleep(3)
+                cus_func.get_ovpn(session['userid'])
+            elif request.args.get('action') == 'downovpn':
+                output_file = session['username'] + '.ovpn'
+                return send_file(cus_func.download_path(session['userid']), as_attachment=True, attachment_filename=output_file)
     return render_template("index.html")
 
 @app.route('/index')
 def rhome():
     return redirect(url_for("home"))
 
-@app.route('/index/download')
-def download_file():
-	path = "/home/kali/College/AWS_Docker/web/static/openvpn/client.ovpn" ##absolute path for the file
-	return send_file(path, as_attachment=True)
 
 @login_manager.user_loader
 def load_user(id):
@@ -168,7 +171,6 @@ def update(tid):
     user.completedlab += ":"
     user.completedlab += str(tid)
     
-
     db.session.commit()
     return ''
 
