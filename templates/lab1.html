@@ -13,20 +13,17 @@
     </ol>
 </nav>
 
+
   <!--Toast-->
   <div id="toast_containerout">
-
-  <div id = "toastcontainer">
-
+   <div id = "toastcontainer"></div>
   </div>
-
-   </div>
   <!--end toast-->
 
 <div style="display:flex;height:100vh;" id="main_div"> <!--main div-->
 <div class="split" id="split_one">
 
-  <!--Launch VM / machine button -->
+  <!--Launch  machine button -->
   <div class="machineInfo" style="display:none;margin:0em 1em;"> <!--machine info and countdown-->
     <table class="table">
       <thead>
@@ -48,11 +45,8 @@
     </table>
   </div>
   <div class="container"> <!--button -->
-    <button type="button" id="launchVM" class="btn btn-success" disabled>Launch VM</button>
     <button type="button" id="launchMachine" class="btn btn-success">Launch Machine</button>
   </div>
-
-
 
   <!--each task in the labs-->
   <div class="container2">
@@ -133,37 +127,20 @@ var tasklist_len=document.getElementById('tasklist_length').value;
 console.log('tasklist_len = ' + tasklist_len);
 
 
-//create a split view of the window / launching virtual machine?
-$("#launchVM").click(function(){
-    $("#split_one").addClass("left");
-    $("#split_two").show();
-    $("#split_two").addClass("right");
-    $("#splitDiv").show();
-    $("#launchVM").hide();
-    
-    $('#splitDiv').jSplitter({
-    'leftdiv': 'split_one',
-    'rightdiv': 'split_two',
-    'flex': true
-    });
-  });
-
-  //return to original state
-  $("#terminateVM").click(function(){
-    $("#split_two").hide();
-    $("#splitDiv").hide();
-    $("#split_one").removeClass("left");
-    $("#launchVM").show();
-
-  })
-
  //launching and terminating machine
  $("#launchMachine").click(function(){
+
+    //use ajax to start the instance asyn
+    $.ajax({url:"/pentest/lab1?action=launch", type:"GET"});
+
     $(".machineInfo").show();
     $("#launchMachine").hide();
     console.log("Launch VM");
     countdown();
+
+    //create the toast/ notification 
     createToast('Machine Starting... Please Wait','b');
+
 
   })
 
@@ -189,6 +166,8 @@ $("#launchVM").click(function(){
       
       //the countdown over, terminate the machine
       if (d < 0) {
+        //stop the instance using ajax
+        $.ajax({url:"/pentest/lab1?action=stop", type:"GET"});
         clearInterval(x);
         document.getElementById("countdowntimer").innerHTML = "EXPIRED";
         $(".machineInfo").hide();
@@ -196,8 +175,13 @@ $("#launchVM").click(function(){
       }
       document.getElementById('terminateMachine').onclick = function() { //when terminate button is clicked
         clearInterval(x);
+        
+        //stop the instance using ajax
+        $.ajax({url:"/pentest/lab1?action=stop", type:"GET"});
         $(".machineInfo").hide();
         $("#launchMachine").show();
+
+        //create the toast/notification for terminating machine 
         createToast('Terminating Machine.','b');
 
       }
@@ -336,6 +320,14 @@ function createToast(text, bgcolor){
     $('#' + id).toast('show');
     $(this).closest('.toast').toast('dispose');
 
-     }
+  }
+
+
+
+
+
 </script>
+
+
+
 {% endblock %}

@@ -10,7 +10,7 @@ def create_user(user):
     print(stmt)
     
 def create_ovpn(user):
-    stmt = "sh /home/kali/College/AWS_Docker/web/openvpn/exec_adduser.sh createovpn " + user
+    stmt = "sh /hmome/kali/College/AWS_Docker/web/openvpn/exec_adduser.sh createovpn " + user
     subprocess.Popen(stmt,  shell=True)
         
     #print(stmt)
@@ -26,3 +26,14 @@ def get_ovpn(user):
 def download_path(user):
 	path = "/tmp/ovpn/" + str(user) + '.ovpn'      ##absolute path for the file
 	return path
+
+def launch(instance):
+    stmt= "aws ec2 start-instances --instance-ids " + instance
+    print(stmt)
+    subprocess.Popen(stmt,  shell=True)
+    
+def stop(instance):
+    stmt= "aws ec2 stop-instances --instance-ids " + instance
+    print(stmt)
+    subprocess.Popen(stmt,  shell=True)
+    

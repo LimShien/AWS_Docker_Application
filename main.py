@@ -51,7 +51,6 @@ def home():
                 cus_func.create_user(session['userid'])
             elif request.args.get('action') == 'getovpn':
                 cus_func.create_ovpn(session['userid']) 
-                time.sleep(3)
                 cus_func.get_ovpn(session['userid'])
             elif request.args.get('action') == 'downovpn':
                 output_file = session['username'] + '.ovpn'
@@ -129,6 +128,12 @@ def selectlab():
 @app.route('/pentest/lab<int:i>', methods=['GET'])
 @login_required
 def lab(i):
+    if request.method == 'GET':
+        if  request.args.get('action') == 'launch' :
+            cus_func.launch("i-0a1930f6ad2d126fe")
+        if  request.args.get('action') == 'stop' :
+            cus_func.stop("i-0a1930f6ad2d126fe")
+
     session['task-list']=0
     template = "lab" + str(i) + ".html"
     return render_template(template, tasklist=labs.query.all())    
@@ -146,8 +151,6 @@ def admin_dashboard():
         return render_template("admin.html", user =users.query.all(), lab=labs.query.all()) 
     else: 
         return redirect(url_for("dashboard"))
-
-
 
 @app.route('/pentest/lab1/task-<int:tid>')
 def update(tid):
