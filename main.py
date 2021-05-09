@@ -47,14 +47,24 @@ class openvpn_config(db.Model):
 def home():
     if request.method == 'GET':
         if 'userid' in session:  
-            if  request.args.get('action') == 'createprofile' :
-                cus_func.create_user(session['userid'])
-            elif request.args.get('action') == 'getovpn':
+            if request.args.get('action') == 'getovpn':
                 cus_func.create_ovpn(session['userid']) 
                 cus_func.get_ovpn(session['userid'])
             elif request.args.get('action') == 'downovpn':
                 output_file = session['username'] + '.ovpn'
-                return send_file(cus_func.download_path(session['userid']), as_attachment=True, attachment_filename=output_file)
+                path = cus_func.download_path(session['userid'])
+                try:
+                    print("downloading")
+                    return send_file(path, as_attachment=True, attachment_filename=output_file) 
+                except:
+                    #regenerate configuration file if not found
+                    print("file not found, re-generating")
+                    cus_func.create_ovpn(session['userid'])
+                    cus_func.get_ovpn(session['userid'])
+                    time.sleep(2)
+                    return send_file(path, as_attachment=True, attachment_filename=output_file)
+                    
+        
     return render_template("index.html")
 
 @app.route('/index')
@@ -111,6 +121,8 @@ def register():
                 db.session.add(usr)  # add to database
                 db.session.commit()
 
+                cus_func.create_user(session['userid'])#create ovpn user profile upon registering account 
+
                 flash("Account created successfully")
                 return redirect(url_for("login"))
             else:
@@ -148,7 +160,7 @@ def dashboard():
 @login_required
 def admin_dashboard():
     if session['username'] == 'admin':
-        return render_template("admin.html", user =users.query.all(), lab=labs.query.all()) 
+        return render_template("admin.html", user =users.query.all(), lab=labs.query.all(), instance=cus_func.get_instance()) 
     else: 
         return redirect(url_for("dashboard"))
 

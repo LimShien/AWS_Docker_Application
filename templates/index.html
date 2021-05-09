@@ -23,6 +23,10 @@
     </div>
 
      {% else %}<!-- redirect to login page if not logged in-->
+     <div class="banner_nav1">
+      <h1 class="title" id="title_h1">AWS-Docker</h1>
+      <h2 class="title" id="title_h2">Virtual Learning Environment</h2>
+    </div>
      <div class="banner_nav3">
       <a href ="login"><button type="button" id="auth" class="btn btn-outline-primary btn-sm"><i class="fas fa-sign-in-alt"  > Login</i></button></a>
       <a href ="register"><button type="button"  id="auth" class="btn btn-outline-info btn-sm"><i class="fas fa-user-plus" > Sign Up</i></button></a>
@@ -65,30 +69,22 @@
 
           <div class="modal-body" id="ovpnmodal">
 
-          <form method="GET">
-          <div class="ovpn">
-            <button type="submit" class="btn btn-light shadow-sm ovpnchild" id="create">
-              <a href="?action=createprofile" id="create_a">Create Profile </a>
-              <span class="spinner-border spinner-border-sm status" id="loader_cr" role="status" aria-hidden="true" style="display:none;"></span>
-              <i class="fas fa-check status  bg-gradient-success" id="okay_cr" style="display:none;"></i>
-             </button>
-
-            </div>
-
+          <p>* OpenVPN user profile had been created automatically.</p>
+          <form>
           <div class="ovpn">
             <button type="submit" class="btn btn-light shadow-sm ovpnchild" id="generate">
-                <a href="?action=getovpn" class="status" id="generate_a">Generate Configuration File</a> 
-                <span class="spinner-border spinner-border-sm status" id="loader" role="status" aria-hidden="true" style="display:none;"></span>
-                <i class="fas fa-check status  bg-gradient-success" id="okay" style="display:none;"></i>
+              <p  class="status text-primary" id="generate_t">Generate Configuration File</p>
+              <span class="spinner-border spinner-border-sm status" id="loader" role="status" aria-hidden="true"style="display: none;"  ></span>
+              <i class="fas fa-check bg-gradient-success status" id="okay" style="display: none;" ></i>
             </button>
           </div>
+
 
           <div class="ovpn">
            <button type="submit" class="btn btn-light shadow-sm ovpnchild">
              <a href="?action=downovpn">Download Configuration File</a>
             </button>
           </div>
-
         </form>
         </div>
 
@@ -123,45 +119,23 @@
 </div>
 
 <script>
-  $("#generate").click(function(){
-    
+
+$("#generate").click(function(){
+
   $("#loader").show();
-  $("#okay").hide();
-  $("#generate_a").text("Generating Config File...");
-
+  $("#generate_t").text("Generating Config File...");
+  $.ajax({url:"/?action=getovpn", type:"GET"});
   console.log("Generating Config File...");
-
   setTimeout(function(){
     $("#loader").hide();
     $("#okay").show();
-    $("#generate").attr("disabled", "true");
-    $("#generate_a").attr("disabled", "true");
-    $("#generate_a").css('pointerEvents', 'none');
-    $("#generate_a").text("Config File Generated");
-
+    $("#generate_t").text("Config File Generated");
+    $("#generate").attr("disabled","true");
     console.log("Config File Generated");
-  }, 3500);
+  }, 2800);
   $('#modelforovpn').modal('show');
   console.log("Config File Generated Successfully");
-});
 
-$("#create").click(function(){
-    $("#loader_cr").show();
-    $("#okay_cr").hide();
-    $("#create_a").text("Creating Profile ...");
-    console.log("Creating Profile ...");
-    setTimeout(function(){
-      $("#loader_cr").hide();
-      $("#okay_cr").show();
-      $("#create").attr("disabled", "true");
-      $("#create_a").attr("disabled", "true");
-      $("#create_a").css('pointerEvents', 'none');
-      $("#create_a").text("Profile Created Successfully");
-      console.log("Profile Created Successfully");
-    }, 3500);
-    $('#modelforovpn').modal('show');
   });
-  
-
 </script>
 {% endblock %}

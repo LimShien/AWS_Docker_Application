@@ -114,4 +114,16 @@
     padding:0;
     margin:0;
     margin-left: 1em;
+    float: left;
+    position: relative;
   }
+
+  #title_h2{
+  
+  }
+
+  .banner_nav1{
+
+    padding-bottom: 1em;
+  }
+  
